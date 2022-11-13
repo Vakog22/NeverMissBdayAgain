@@ -122,6 +122,7 @@ public class CalendarView extends LinearLayout {
                 EventRecyclerAdapter eventRecyclerAdapter = new EventRecyclerAdapter(showView.getContext(),CollectEventByDate(date));
                 recyclerView.setAdapter(eventRecyclerAdapter);
                 eventRecyclerAdapter.notifyDataSetChanged();
+                //fefefefef
 
                 builder.setView(showView);
                 alertDialog = builder.create();
