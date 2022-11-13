@@ -17,11 +17,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String event = intent.getStringExtra("event");
         String pName = intent.getStringExtra("person_name");
         int notId = intent.getIntExtra("id", 0);
         Intent activityIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,activityIntent,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,activityIntent,PendingIntent.FLAG_MUTABLE);
 
         String channelId = "channel_id";
         CharSequence name = "channel_name";
@@ -37,8 +36,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification notification = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setContentTitle(event)
-                .setContentText(pName)
+                .setContentTitle("У кого-то сегодня ДР!")
+                .setContentText("У" + pName)
                 .setDeleteIntent(pendingIntent)
                 .setGroup("Group_birthdays")
                 .build();

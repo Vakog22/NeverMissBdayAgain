@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_EVENTS_TABLE = "create table " +
-            DBStructure.EVENT_TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            DBStructure.EVENT_TABLE_NAME + "(id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             DBStructure.PERSON_NAME + " TEXT, " +
             DBStructure.PERSON_AGE + " TEXT, " +
             DBStructure.DATE + " TEXT, " +

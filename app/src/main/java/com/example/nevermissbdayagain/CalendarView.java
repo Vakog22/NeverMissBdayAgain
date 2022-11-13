@@ -121,10 +121,6 @@ public class CalendarView extends LinearLayout {
                             SetUpCalendar();
                             alertDialog.dismiss();
                         }
-//                        alarmYear = c.get(Calendar.YEAR);
-//                        alarmMonth = c.get(Calendar.MONTH);
-//                        alarmDay = c.get(Calendar.DAY_OF_MONTH);
-
                     }
                 });
 
@@ -175,6 +171,7 @@ public class CalendarView extends LinearLayout {
         while (cursor.moveToNext()){
             code = cursor.getInt(cursor.getColumnIndexOrThrow(DBStructure.ID));
         }
+        dbOpenHelper.close();
         cursor.close();
         return code;
     }

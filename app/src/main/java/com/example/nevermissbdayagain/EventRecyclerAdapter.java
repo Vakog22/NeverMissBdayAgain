@@ -1,5 +1,6 @@
 package com.example.nevermissbdayagain;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -44,7 +45,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         final Events events = arrayList.get(position);
         holder.PersonName.setText(events.getPERSON_NAME());
         holder.PersonAge.setText(events.getPERSON_AGE());
@@ -53,7 +54,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
             @Override
             public void onClick(View view) {
                 deleteCalendarEvent(events.getPERSON_NAME(),events.getPERSON_AGE(),events.getDATE());
-                arrayList.remove(position); //f433ttbgeergerguhujjujgouuhu
+                arrayList.remove(position);
                 notifyDataSetChanged();
             }
         });
@@ -155,14 +156,14 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         Intent intent = new Intent(context.getApplicationContext(), AlarmReceiver.class);
         intent.putExtra("person_name", pName);
         intent.putExtra("id", RequestCode);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,RequestCode,intent,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,RequestCode,intent,PendingIntent.FLAG_MUTABLE);
         AlarmManager alarmManager = (AlarmManager)context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
     }
 
     private void deleteAlarm(int RequestCode){
         Intent intent = new Intent(context.getApplicationContext(), AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,RequestCode,intent,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,RequestCode,intent,PendingIntent.FLAG_MUTABLE);
         AlarmManager alarmManager = (AlarmManager)context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
@@ -173,8 +174,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         Cursor cursor = dbOpenHelper.ReadIDEvents(date,pName,sqLiteDatabase);
         while (cursor.moveToNext()){
-            code = cursor.getInt(cursor.getColumnIndexOrThrow(DBStructure.ID)); //kill me
+            code = cursor.getInt(cursor.getColumnIndexOrThrow(DBStructure.NOTIFY));
         }
+        dbOpenHelper.close();
         cursor.close();
         return code;
     }
