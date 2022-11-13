@@ -16,7 +16,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             DBStructure.PERSON_AGE + " TEXT, " +
             DBStructure.DATE + " TEXT, " +
             DBStructure.MONTH + " TEXT, " +
-            DBStructure.YEAR + " TEXT)";
+            DBStructure.YEAR + " TEXT, " +
+            DBStructure.NOTIFY + " TEXT)";
 
     private static final String DROP_EVENTS_TABLE = "DROP TABLE IF EXISTS " + DBStructure.EVENT_TABLE_NAME;
 
@@ -41,13 +42,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(clearDBQuery);
     }
 
-    public void SaveEvent(String person_name, String person_age, String date, String month, String year, SQLiteDatabase sqLiteDatabase){
+    public void SaveEvent(String person_name, String person_age, String date, String month, String year, String notify, SQLiteDatabase sqLiteDatabase){
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBStructure.PERSON_NAME,person_name);
         contentValues.put(DBStructure.PERSON_AGE,person_age);
         contentValues.put(DBStructure.DATE,date);
         contentValues.put(DBStructure.MONTH,month);
         contentValues.put(DBStructure.YEAR,year);
+        contentValues.put(DBStructure.NOTIFY,notify);
         sqLiteDatabase.insert(DBStructure.EVENT_TABLE_NAME, null, contentValues);
     }
 
@@ -55,6 +57,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         String[] Projections = {DBStructure.PERSON_NAME, DBStructure.PERSON_AGE, DBStructure.DATE, DBStructure.MONTH, DBStructure.YEAR};
         String Selection = DBStructure.DATE + "=?";
         String[] SelectionArgs = {date};
+
+        return  sqLiteDatabase.query(DBStructure.EVENT_TABLE_NAME,Projections,Selection,SelectionArgs,null,null,null);
+    }
+
+    public Cursor ReadIDEvents(String date,String personName,SQLiteDatabase sqLiteDatabase){
+        String[] Projections = {DBStructure.ID, DBStructure.NOTIFY};
+        String Selection = DBStructure.DATE + "=? and " + DBStructure.PERSON_NAME + "=?";
+        String[] SelectionArgs = {date,personName};
 
         return  sqLiteDatabase.query(DBStructure.EVENT_TABLE_NAME,Projections,Selection,SelectionArgs,null,null,null);
     }
@@ -71,5 +81,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         String Selection = DBStructure.PERSON_NAME + "=? and " + DBStructure.PERSON_AGE + "=? and " + DBStructure.DATE + "=?";
         String[] SelectionArgs = {person_name,person_age,date};
         sqLiteDatabase.delete(DBStructure.EVENT_TABLE_NAME, Selection, SelectionArgs);
+    }
+
+    public void UpdateEvent(String date,String personName,String notify,SQLiteDatabase sqLiteDatabase){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBStructure.NOTIFY,notify);
+        String Selection = DBStructure.DATE + "=? and " + DBStructure.PERSON_NAME + "=?";
+        String[] SelectionArgs = {date,personName};
+        sqLiteDatabase.update(DBStructure.EVENT_TABLE_NAME, contentValues, Selection, SelectionArgs);
+
     }
 }

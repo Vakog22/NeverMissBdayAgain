@@ -16,7 +16,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/btn_prev"
-            android:background="@mipmap/ic_launcher"
+            android:background="@drawable/ic_prev"
             android:layout_margin="10dp"/>
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/btn_next"
-            android:background="@mipmap/ic_launcher"
+            android:background="@drawable/ic_next"
             android:layout_margin="10dp"/>
     </LinearLayout>
 

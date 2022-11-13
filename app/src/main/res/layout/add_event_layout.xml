@@ -29,15 +29,27 @@
         android:layout_margin="8dp"
         android:gravity="center"/>
 
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:text="Напомнить мне"
+        android:id="@+id/cb_remind_me"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_add_event"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Добавить"
         android:layout_gravity="center"
         android:layout_margin="10dp"
+        android:layout_marginStart="100dp"
         android:textAllCaps="false"
         android:textStyle="bold"
         android:background="@color/white"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        android:layout_weight="1"/>
+
 </LinearLayout>
