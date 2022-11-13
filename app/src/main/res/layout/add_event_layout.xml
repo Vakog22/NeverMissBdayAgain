@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/holo_orange_dark">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:hint="Введите имя человека"
+        android:textColorHint="@color/black"
+        android:inputType="textShortMessage"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:id="@+id/tv_person_name"/>
+
+    <EditText
+        android:id="@+id/tv_person_age"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:hint="Введите сколько лет исполнится"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:inputType="textShortMessage"
+        android:layout_margin="8dp"
+        android:gravity="center"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Добавить"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
+</LinearLayout>
