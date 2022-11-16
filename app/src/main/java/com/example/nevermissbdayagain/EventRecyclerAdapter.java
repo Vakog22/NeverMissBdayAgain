@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,12 +32,13 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         return new MyViewHolder(view);
     }
 
+    //Привязка данных
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Events events = arrayList.get(position);
         holder.PersonName.setText(events.getPERSON_NAME());
         holder.PersonAge.setText(events.getPERSON_AGE());
-        holder.DateText.setText(events.getDATE());
+        //Ф-я кнопки удалить
         holder.Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,25 +49,27 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         });
     }
 
+    //Возвращает кол-во элементов
     @Override
     public int getItemCount() {
         return arrayList.size();
     }
 
+    //Класс отдельной строчки
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView DateText, PersonName, PersonAge;
+        TextView PersonName, PersonAge;
         Button Delete;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            DateText = itemView.findViewById(R.id.tv_date_out);
             PersonName = itemView.findViewById(R.id.tv_person_name_out);
             PersonAge = itemView.findViewById(R.id.tv_person_age_out);
             Delete = itemView.findViewById(R.id.btn_delete_event);
         }
     }
 
+    //Ф-я удаления события
     private void deleteCalendarEvent(String person_name, String person_age, String date){
         dbOpenHelper = new DBOpenHelper(context);
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();

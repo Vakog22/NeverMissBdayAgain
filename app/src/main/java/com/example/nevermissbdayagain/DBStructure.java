@@ -1,5 +1,7 @@
 package com.example.nevermissbdayagain;
 
+
+//Структура БД
 public class DBStructure {
     public static final String DB_NAME = "DB_EVENTS";
     public static final int DB_VERSION = 1;

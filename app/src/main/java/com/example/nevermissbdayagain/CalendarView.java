@@ -1,14 +1,16 @@
 package com.example.nevermissbdayagain;
 
+import android.animation.Animator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.Layout;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,18 +39,19 @@ public class CalendarView extends LinearLayout {
     GridView gv_gridview;
     Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
     Context context;
-    private static final int MAX_CALENDAR_DAYS = 42;
+    private static final int MAX_CALENDAR_DAYS = 49;
 
     List<Date> dates = new ArrayList<>();
     List<Events> eventsList = new ArrayList<>();
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy",Locale.ENGLISH);
     SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM",Locale.ENGLISH);
     SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy",Locale.ENGLISH);
     SimpleDateFormat eventDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
 
     AlertDialog alertDialog;
     MyGridAdapter myGridAdapter;
+
+
 
     public CalendarView(Context context) {
         super(context);
@@ -80,36 +82,6 @@ public class CalendarView extends LinearLayout {
         gv_gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setCancelable(true);
-                View addView = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_event_layout,null);
-                Button btn_add_event = addView.findViewById(R.id.btn_add_event);
-                EditText et_person_name = addView.findViewById(R.id.tv_person_name);
-                EditText et_person_age = addView.findViewById(R.id.tv_person_age);
-
-                final String date = eventDateFormat.format(dates.get(position));
-                final String month = monthFormat.format(dates.get(position));
-                final String year = yearFormat.format(dates.get(position));
-
-
-                btn_add_event.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        SaveEvent(et_person_name.getText().toString(), et_person_age.getText().toString(),date,month,year);
-                        SetUpCalendar();
-                        alertDialog.dismiss();
-                    }
-                });
-
-                builder.setView(addView);
-                alertDialog = builder.create();
-                alertDialog.show();
-            }
-        });
-
-        gv_gridview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 String date = eventDateFormat.format(dates.get(position));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -122,7 +94,7 @@ public class CalendarView extends LinearLayout {
                 EventRecyclerAdapter eventRecyclerAdapter = new EventRecyclerAdapter(showView.getContext(),CollectEventByDate(date));
                 recyclerView.setAdapter(eventRecyclerAdapter);
                 eventRecyclerAdapter.notifyDataSetChanged();
-                //fefefefef
+
 
                 builder.setView(showView);
                 alertDialog = builder.create();
@@ -133,12 +105,60 @@ public class CalendarView extends LinearLayout {
                         SetUpCalendar();
                     }
                 });
-
-                return true;
             }
         });
 
+        gv_gridview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(true);
+                View addView = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_event_layout,null);
+                Button btn_add_event = addView.findViewById(R.id.btn_add_event);
+                EditText et_person_name = addView.findViewById(R.id.tv_person_name);
+                EditText et_person_age = addView.findViewById(R.id.tv_person_age);
+                InputFilter[] filterArray = new InputFilter[1];
+                filterArray[0] = new InputFilter.LengthFilter(30);
+                et_person_name.setFilters(filterArray);
+
+                final String date = eventDateFormat.format(dates.get(position));
+                final String month = monthFormat.format(dates.get(position));
+                final String year = yearFormat.format(dates.get(position));
+
+
+                btn_add_event.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String PersonName = et_person_name.getText().toString();
+
+                        if (PersonName != null && !PersonName.trim().isEmpty()){
+                            if (et_person_age.getText().toString() != null && !et_person_age.getText().toString().trim().isEmpty()){
+                                int PersonAge = Integer.parseInt(et_person_age.getText().toString());
+                                if (PersonAge > 0 && PersonAge <= 150){
+                                    SaveEvent(et_person_name.getText().toString(), et_person_age.getText().toString(),date,month,year);
+                                    SetUpCalendar();
+                                    alertDialog.dismiss();
+                                }
+                                else {
+                                    Toast.makeText(context, "Возраст слишком мал или велик", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            else {
+                                Toast.makeText(context, "Поле возраста пустое", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else {
+                            Toast.makeText(context, "Поле имени пустое", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setView(addView);
+                alertDialog = builder.create();
+                alertDialog.show();
+                return true;
+            }
+        });
     }
 
     private ArrayList<Events> CollectEventByDate(String date){
@@ -185,12 +205,48 @@ public class CalendarView extends LinearLayout {
     }
 
     private void SetUpCalendar(){
-        String currentDate = dateFormat.format(calendar.getTime());
-        tv_currentDate.setText(currentDate);
+        switch (calendar.get(Calendar.MONTH)) {
+            case  (1):
+                tv_currentDate.setText("Февраль " + calendar.get(Calendar.YEAR));
+                break;
+            case  (2):
+                tv_currentDate.setText("Март " + calendar.get(Calendar.YEAR));
+                break;
+            case  (3):
+                tv_currentDate.setText("Апрель " + calendar.get(Calendar.YEAR));
+                break;
+            case  (4):
+                tv_currentDate.setText("Май " + calendar.get(Calendar.YEAR));
+                break;
+            case  (5):
+                tv_currentDate.setText("Июнь " + calendar.get(Calendar.YEAR));
+                break;
+            case  (6):
+                tv_currentDate.setText("Июль " + calendar.get(Calendar.YEAR));
+                break;
+            case  (7):
+                tv_currentDate.setText("Август " + calendar.get(Calendar.YEAR));
+                break;
+            case  (8):
+                tv_currentDate.setText("Сентябрь " + calendar.get(Calendar.YEAR));
+                break;
+            case  (9):
+                tv_currentDate.setText("Октябрь " + calendar.get(Calendar.YEAR));
+                break;
+            case  (10):
+                tv_currentDate.setText("Ноябрь " + calendar.get(Calendar.YEAR));
+                break;
+            case  (11):
+                tv_currentDate.setText("Декабрь " + calendar.get(Calendar.YEAR));
+                break;
+            case  (0):
+                tv_currentDate.setText("Январь " + calendar.get(Calendar.YEAR));
+                break;
+        }
         dates.clear();
         Calendar monthCalender = (Calendar) calendar.clone();
         monthCalender.set(Calendar.DAY_OF_MONTH,1);
-        int FirstDayOfMonth = monthCalender.get(Calendar.DAY_OF_WEEK)-2;
+        int FirstDayOfMonth = monthCalender.get(Calendar.DAY_OF_WEEK)+5;
         monthCalender.add(Calendar.DAY_OF_MONTH, -FirstDayOfMonth);
         CollectEventsPerMonth(monthFormat.format(calendar.getTime()), yearFormat.format(calendar.getTime()));
 
