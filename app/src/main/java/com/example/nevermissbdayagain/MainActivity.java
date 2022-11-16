@@ -6,6 +6,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+
+
 public class MainActivity extends AppCompatActivity {
 
     CalendarView calendarView;
@@ -16,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         calendarView = (CalendarView) findViewById(R.id.cv_calendarView);
     }
 
+    //Очистка бд (НЕ ЗАПУСКАТЬ)
     protected void ClearDBTable() {
         Context context = this;
         DBOpenHelper dbOpenHelper = new DBOpenHelper(context);

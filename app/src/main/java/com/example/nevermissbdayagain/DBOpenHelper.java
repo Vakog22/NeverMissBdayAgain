@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+//Класс для связи с бд
 public class DBOpenHelper extends SQLiteOpenHelper {
 
+    //Стринга создания БД
     private static final String CREATE_EVENTS_TABLE = "create table " +
             DBStructure.EVENT_TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             DBStructure.PERSON_NAME + " TEXT, " +
@@ -20,7 +22,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String DROP_EVENTS_TABLE = "DROP TABLE IF EXISTS " + DBStructure.EVENT_TABLE_NAME;
 
-
+    //Авто-генерация
     public DBOpenHelper(@Nullable Context context) {
         super(context, DBStructure.DB_NAME, null, DBStructure.DB_VERSION);
     }

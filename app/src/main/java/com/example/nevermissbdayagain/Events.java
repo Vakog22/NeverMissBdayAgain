@@ -1,5 +1,6 @@
 package com.example.nevermissbdayagain;
 
+//Класс сущности бд
 public class Events {
     String PERSON_NAME,PERSON_AGE,DATE,MONTH,YEAR;
 
@@ -11,6 +12,7 @@ public class Events {
         this.YEAR = YEAR;
     }
 
+    //Авто-генерация
     public String getPERSON_NAME() {
         return PERSON_NAME;
     }

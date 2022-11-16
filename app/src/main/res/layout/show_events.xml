@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/holo_orange_dark">
+    android:background="@drawable/gradient">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

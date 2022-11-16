@@ -3,14 +3,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/holo_orange_dark">
+    android:background="@drawable/gradient">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/white"
         android:textColor="@color/black"
-        android:hint="Введите имя человека"
+        android:hint="Имя человека"
         android:textColorHint="@color/black"
         android:inputType="textShortMessage"
         android:layout_margin="8dp"
@@ -22,10 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/white"
-        android:hint="Введите сколько лет исполнится"
+        android:hint="Сколько лет исполнится"
         android:textColorHint="@color/black"
         android:textColor="@color/black"
-        android:inputType="textShortMessage"
+        android:inputType="number"
         android:layout_margin="8dp"
         android:gravity="center"/>
 
@@ -38,6 +38,6 @@
         android:layout_margin="10dp"
         android:textAllCaps="false"
         android:textStyle="bold"
-        android:background="@color/white"
+        android:background="@color/current_month"
         android:textColor="@color/black"/>
 </LinearLayout>
